@@ -59,10 +59,11 @@ You can add dependent Spinners to an Android App by following the following step
 
 ### Java code for the Activity:
   ```
-  public class MainActivity extends AppCompatActivity {
+ public class MainActivity extends AppCompatActivity {
     private Spinner mStateSpinner, mLgaSpinner;
     private String mState, mLga;
     private List<String> states;
+    private static final int SPINNER_HEIGHT = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,13 @@ You can add dependent Spinners to an Android App by following the following step
 
         mStateSpinner = findViewById(R.id.stateSpinner);
         mLgaSpinner = findViewById(R.id.lgaSpinner);
+        resizeSpinner(mStateSpinner, SPINNER_HEIGHT);
+        resizeSpinner(mLgaSpinner, SPINNER_HEIGHT);
+
         states = Nigeria.getStates();
 
-        //call to method that'll set up state and lga
+        //call to method that'll set up state and lga spinner
         setupSpinners();
-
     }
 
 
@@ -87,8 +90,7 @@ You can add dependent Spinners to an Android App by following the following step
         // the spinner will use the default layout
         //populates the quantity spinner ArrayList
 
-        ArrayAdapter<String> statesAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
+        ArrayAdapter<String> statesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states);
 
         // Specify dropdown layout style - simple list view with 1 item per line
         statesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -107,10 +109,11 @@ You can add dependent Spinners to an Android App by following the following step
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                
+                // Unknown
             }
         });
     }
+
 
     /**
      * method to set up the state spinner
@@ -139,23 +142,41 @@ You can add dependent Spinners to an Android App by following the following step
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                 mLga = (String) parent.getItemAtPosition(position);
+                Toast.makeText(MainActivity.this, "state: " + mState + " lga: " + mLga, Toast.LENGTH_LONG).show();
             }
-            
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
     }
+
+    private void resizeSpinner(Spinner spinner, int height) {
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+
+            //Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(spinner);
+
+            //set popupWindow height to height
+            popupWindow.setHeight(height);
+
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
-  
+
   ```
 ## Screenshot
-![lga_1](https://user-images.githubusercontent.com/28486520/51506884-c9687980-1dee-11e9-8d68-05d2709586d1.png)
+![lga](https://user-images.githubusercontent.com/28486520/57760397-61b6a100-76f3-11e9-8ec3-4d81e228a345.png)
+
 ## Contributing
  
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
+3. Commit your changes: `git commit -m 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
