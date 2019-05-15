@@ -18,7 +18,7 @@ To get the project into your build:
  ##### Step 2. Add the dependency to your app's build.gradle:
   ```
   dependencies {
-	        implementation 'com.github.Ikhiloya:NigeriaStatesAndLGAs:0.1.0'
+	        implementation 'com.github.Ikhiloya:NigeriaStatesAndLGAs:0.1.1'
 	}
   ```
 
