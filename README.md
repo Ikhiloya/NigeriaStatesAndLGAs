@@ -1,6 +1,6 @@
 # NigeriaStatesAndLGAs
 An android library that lists all states in Nigeria and their respective Local Government Areas.
-This is particularly useful in setting up dependent spinners for both states and their respective ocal government areas.
+This is particularly useful in setting up dependent spinners for both states and their respective local government areas.
 
 # Installation
 To get the project into your build:
